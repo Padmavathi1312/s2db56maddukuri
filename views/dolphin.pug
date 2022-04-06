@@ -1,0 +1,34 @@
+extends layout
+
+block content
+
+  h1= title
+  -
+    let results = [
+      {
+        "Name": "Spinner",
+        "Age": 25,
+        "Weight": 30
+      },
+      {
+        "Name": "Hector",
+        "Age": 30,
+        "Weight": 65
+      },
+      {
+        "Name": "Dusky",
+        "Age": 21,
+        "Weight": 43
+      },                   
+    ]
+  div(class= "container-fluid")
+    div(class = "row")
+      each item,index in results
+        div(class= "col-sm-2" , onclick=`buy(${index})`) #{item.Name}
+        div(class= "col-sm-2", onclick=`buy(${index})`) #{item.Age}
+        div(class= "col-sm-2", onclick=`buy(${index})`) #{item.Weight}
+
+  script.
+    function buy(itemNum){
+      alert(`The purchased item is ${itemNum+1}`)
+    }
