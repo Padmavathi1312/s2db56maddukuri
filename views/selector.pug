@@ -3,13 +3,10 @@ extends layout
 block content
 
   h1= title
-  p Welcome to Pug
-  button(type = "button", class = "btn btn-success", onClick = "moreClaps()") Press Me
-  div(id = "target") Clap for me
-
-    script.
-      var clap_count = 0;
-      function moreClaps(){
-        clap_count = clap_count + 2;
-        document.getElementById("target").innerHTML = 'Clap '+ clap_count +' times';
-      }
+  - var image_names = ["Amazon Dolphin.jpg","Dolphin.jpg","Dusky Dolphin.jpg","Hector Dolphin.jpg","Spinner Dolphin.jpg"]
+  - for(let i=0; i<3;i++){
+    -var num = image_names[Math.floor(Math.random() * 5)]
+    
+    img(src= "/images/"+num, alt= num, style={width: "300",height: "300"})
+  -}
+  
