@@ -19,6 +19,7 @@ var addmodsRouter = require('./routes/addmods');
 var selectorRouter = require('./routes/selector');
 var dolphin = require("./models/dolphin");
 var dolphinRouter = require("./routes/dolphin");
+var resourceRouter = require('./routes/resource');
 
 // We can seed the collection if needed onserver start
 async function recreateDB() {
@@ -71,6 +72,7 @@ app.use('/users', usersRouter);
 app.use('/addmods', addmodsRouter);
 app.use('/selector', selectorRouter);
 app.use('/dolphin', dolphinRouter);
+app.use('/resource', resourceRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
