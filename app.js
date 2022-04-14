@@ -7,7 +7,7 @@ var logger = require('morgan');
 const connectionString =
   process.env.MONGO_CON
 mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://Chooseyourconnection:padma@cluster0.2h8dj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://Freezfox:Bearcat123@cluster0.x4efe.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
   {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -18,15 +18,15 @@ var usersRouter = require('./routes/users');
 var addmodsRouter = require('./routes/addmods');
 var selectorRouter = require('./routes/selector');
 var dolphin = require("./models/dolphin");
+var resourceRouter = require("./routes/resource");
 var dolphinRouter = require("./routes/dolphin");
-var resourceRouter = require('./routes/resource');
 
 // We can seed the collection if needed onserver start
 async function recreateDB() {
   // Delete everything
   await dolphin.deleteMany();
   let instance1 = new
-    dolphin({ name: "Dolphin", age: 34, weight: 56 });
+    dolphin({ name: "Dolphin", age: 47, weight: 179 });
   instance1.save(function (err, doc) {
     if (err) return console.error(err);
     console.log("First object saved")
@@ -37,7 +37,7 @@ async function recreateDB() {
   let instance2 = new
     dolphin({
       name: "Bottlenose", age: 76,
-      weight: 97
+      weight: 139
     });
   instance2.save(function (err, doc) {
     if (err) return console.error(err);
@@ -46,8 +46,8 @@ async function recreateDB() {
 
   let instance3 = new
     dolphin({
-      name: "Amazon River Dolphin", age: 54 ,
-      weight: 43
+      name: "Amazon River", age: 56,
+      weight: 200
     });
   instance3.save(function (err, doc) {
     if (err) return console.error(err);
@@ -71,8 +71,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/addmods', addmodsRouter);
 app.use('/selector', selectorRouter);
-app.use('/dolphin', dolphinRouter);
 app.use('/resource', resourceRouter);
+app.use('/dolphin', dolphinRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
