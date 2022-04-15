@@ -11,10 +11,10 @@ exports.dolphin_list = async function(req, res) {
     }
     };
 // for a specific Costume.
-exports.icecream_detail = async function (req, res) {
+exports.dolphin_detail = async function (req, res) {
     console.log("detail" + req.params.id)
     try {
-        result = await icecream.findById(req.params.id)
+        result = await dolphin.findById(req.params.id)
         res.send(result)
     } catch (error) {
         res.status(500)
