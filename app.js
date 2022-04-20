@@ -3,59 +3,23 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
-const connectionString =
-  process.env.MONGO_CON
 mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://Freezfox:Bearcat123@cluster0.x4efe.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
+var dolphin = require('./models/dolphin');
+const connectionString = process.env.MONGO_CON
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var dolphinRouter = require('./routes/dolphin');
 var addmodsRouter = require('./routes/addmods');
 var selectorRouter = require('./routes/selector');
-var dolphin = require("./models/dolphin");
-var resourceRouter = require("./routes/resource");
-var dolphinRouter = require("./routes/dolphin");
+var resourceRouter = require('./routes/resource');
 
-// We can seed the collection if needed onserver start
-async function recreateDB() {
-  // Delete everything
-  await dolphin.deleteMany();
-  let instance1 = new
-    dolphin({ name: "Dolphin", age: 47, weight: 179 });
-  instance1.save(function (err, doc) {
-    if (err) return console.error(err);
-    console.log("First object saved")
-  });
 
-  // We can seed the collection if needed onserver start
+mongoose.connect('mongodb+srv://Chooseyourconnection:padma@cluster0.2h8dj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
-  let instance2 = new
-    dolphin({
-      name: "Bottlenose", age: 76,
-      weight: 139
-    });
-  instance2.save(function (err, doc) {
-    if (err) return console.error(err);
-    console.log("Second object saved")
-  });
-
-  let instance3 = new
-    dolphin({
-      name: "Amazon River", age: 56,
-      weight: 200
-    });
-  instance3.save(function (err, doc) {
-    if (err) return console.error(err);
-    console.log("Third object saved")
-  });
-}
-let reseed = true;
-if (reseed) { recreateDB(); }
 var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -69,10 +33,38 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/dolphin', dolphinRouter);
 app.use('/addmods', addmodsRouter);
 app.use('/selector', selectorRouter);
 app.use('/resource', resourceRouter);
-app.use('/dolphin', dolphinRouter);
+
+// We can seed the collection if needed on server start
+async function recreateDB() {
+  // Delete everything
+  await dolphin.deleteMany();
+  let instance1 = new dolphin(
+    { name: "Bottle nose", age: '43', weight: 60 });
+  instance1.save(function (err, doc) {
+    if (err) return console.error(err);
+    console.log("First object saved")
+  });
+
+  let instance2 = new dolphin(
+    { name: "Amazon River", age: '72', weight: 80 });
+  instance2.save(function (err, doc) {
+    if (err) return console.error(err);
+    console.log("Second object saved")
+  });
+
+  let instance3 = new dolphin(
+    { name: "Dolphin", age: '44', weight: 90 });
+  instance3.save(function (err, doc) {
+    if (err) return console.error(err);
+    console.log("Third object saved")
+  });
+}
+let reseed = true;
+if (reseed) { recreateDB(); }
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -94,8 +86,6 @@ app.use(function (err, req, res, next) {
 var db = mongoose.connection;
 //Bind connection to error event
 db.on('error', console.error.bind(console, 'MongoDB connectionerror:'));
-db.once("open", function () {
-  console.log("Connection to DB succeeded")
-});
-
+db.once("open", function(){
+console.log("Connection to DB succeeded")});
 module.exports = app;
