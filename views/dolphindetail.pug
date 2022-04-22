@@ -1,25 +1,23 @@
 extends layout
 block content
     h1= title
-
-    if(toShow == null)
-    h2 No instance to display
-    else 
-    - let dolphin_id = toShow._id
-    - let name = toShow.name
-    - let age = toShow.age
-    - let weight = toShow.weight
-
-    div
-        div.row
-            div(class='dolphinAttr mr-3') dolphin ID is:
-            div #{dolphin_id}
-        div.row
-            div(class='dolphinAttr mr-3') dolphin Type is:
-            div #{name}
-        div.row
-            div(class='dolphinAttr mr-3') dolphin Size is:
-            div #{age}
-        div.row
-            div(class='dolphinAttr mr-3') dolphin Cost is:
-            div #{weight}
+    if (toShow == null)
+        h2 No instance to display details
+    else
+        - let dolphin_id = toShow._id
+        - let name = toShow.name
+        - let age = toShow.age
+        - let weight = toShow.weight
+        div
+            div.row
+                div(class='dolphinAttr mr-3') dolphin ID is:
+                div #{dolphin_id}
+            div.row
+                div(class='dolphinAttr mr-3') dolphin Type is:
+                div #{name}
+            div.row
+                div(class='dolphinAttr mr-3') dolphin Size is:
+                div #{age}
+            div.row
+                div(class='dolphinAttr mr-3') dolphin Cost is:
+                div #{weight}

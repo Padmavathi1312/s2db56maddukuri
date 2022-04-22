@@ -3,32 +3,14 @@ extends layout
 block content
 
   h1= title
-  -
-    let results = [
-      {
-        "Name": "Spinner",
-        "Age": 25,
-        "Weight": 30
-      },
-      {
-        "Name": "Hector",
-        "Age": 30,
-        "Weight": 65
-      },
-      {
-        "Name": "Dusky",
-        "Age": 21,
-        "Weight": 43
-      },                   
-    ]
+  - let result = results
   div(class= "container-fluid")
-    div(class = "row")
-      each item,index in results
-        div(class= "col-sm-2" , onclick=`buy(${index})`) #{item.Name}
-        div(class= "col-sm-2", onclick=`buy(${index})`) #{item.Age}
-        div(class= "col-sm-2", onclick=`buy(${index})`) #{item.Weight}
-
+    div(class = "col m-1")
+      each item,index in result
+        - let destination = `dispatch(\"/dolphin/update?id=${item._id}\")`
+        div(class="row-sm-2" class="m-1") Item #{item.name}(#{item.age}) is #{item.weight}
+        button.btn( class="btn-primary m-1", onclick= destination) Update
   script.
-    function buy(itemNum){
-      alert(`The purchased item is ${itemNum+1}`)
+    function dispatch(path){
+      window.location.href=path
     }

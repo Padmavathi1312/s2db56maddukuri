@@ -2,43 +2,42 @@ extends layout
 block content
     h1= title
 
-    if(toShow == null)
-    h2 No instance to update
-    else 
-    - let dolphin_id = toShow._id
-    - let name = toShow.name
-    - let age = toShow.age
-    - let weight = toShow.weight
-    
-     div.row(class='mb-2')
-        div.mr-1 ID is
-        div #{dolphin_id}
-    - let actionid = "/resource/dolphin/" + dolphin_id
-    form(id='dolphinForm' action= actionid method="PUT")
-        div.form-group
-            label.dolphinAttr(for='name') dolphin type
-            input#name(type='text' name='name',value= name )
-        div.form-group
-            label.dolphinAttr(for='age') dolphin size
-            input#age(type='text' name='age', value= age)
-        div.form-group
-            label.dolphinAttr(for='weight') dolphin cost
-            input#weight(type='number' name='weight',value= weight)
-            input(type="submit")
-        script.
-            document.forms['dolphinForm'].addEventListener('submit', (event) => {
-                event.preventDefault();
-                // TODO do something here to show user that form is being submitted
-                fetch(event.target.action, {
-                    method: 'PUT',
-                    body: new URLSearchParams(new FormData(event.target)) // event.target is the form
-                }).then((resp) => {
-                    return resp.json(); // or resp.text() or whatever the server sends
-                }).then((body) => {
-                    alert("Save succeded")
-                    // TODO handle body
-                }).catch((error) => {
-                    // TODO handle error
-                    alert("Save failed " + error )
+    if (toShow == null)
+        h2 No instance to update
+    else
+        - let dolphin_id = toShow._id
+        - let name = toShow.name
+        - let age = toShow.age
+        - let weight = toShow.weight
+            div.row(class='mb-2')
+                div.mr-1 ID is
+                div #{dolphin_id}
+        - let actionid = "/resource/dolphins/" + dolphin_id
+        form(id='dolphinForm' action= actionid method="PUT")
+            div.form-group
+                label.dolphinAttr(for='name') dolphin type
+                input#name(type='text' name='name',value= name )
+            div.form-group
+                label.dolphinAttr(for='age') dolphin size
+                input#age(type='text' name='age', value= age)
+            div.form-group
+                label.dolphinAttr(for='weight') dolphin cost
+                input#weight(type='number' name='weight',value= weight)
+                input(type="submit")
+            script.
+                document.forms['dolphinForm'].addEventListener('submit', (event) => {
+                    event.preventDefault();
+                    // TODO do something here to show user that form is being submitted
+                    fetch(event.target.action, {
+                        method: 'PUT',
+                        body: new URLSearchParams(new FormData(event.target)) // event.target is the form
+                    }).then((resp) => {
+                        return resp.json(); // or resp.text() or whatever the server sends
+                    }).then((body) => {
+                        alert("Save succeded")
+                        // TODO handle body
+                    }).catch((error) => {
+                        // TODO handle error
+                        alert("Save failed " + error )
+                    });
                 });
-            });

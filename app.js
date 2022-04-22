@@ -3,6 +3,21 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+passport.use(new LocalStrategy(function (username, password, done) {
+  Account.findOne({ username: username }, function (err, user) {
+    if (err) { return done(err); }
+    if (!user) {
+      return done(null, false, { message: 'Incorrect username.' });
+    }
+    if (!user.validPassword(password)) {
+      return done(null, false, { message: 'Incorrect password.' });
+    }
+    return done(null, user);
+  });
+}))
+
 mongoose = require('mongoose');
 var dolphin = require('./models/dolphin');
 const connectionString = process.env.MONGO_CON
@@ -15,7 +30,7 @@ var selectorRouter = require('./routes/selector');
 var resourceRouter = require('./routes/resource');
 
 
-mongoose.connect('mongodb+srv://Chooseyourconnection:padma@cluster0.2h8dj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
+mongoose.connect(connectionString, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -29,6 +44,15 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(require('express-session')({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
@@ -43,21 +67,21 @@ async function recreateDB() {
   // Delete everything
   await dolphin.deleteMany();
   let instance1 = new dolphin(
-    { name: "Bottle nose", age: '43', weight: 60 });
+    { name: "Bottle Nose", age: '45', weight: 100 });
   instance1.save(function (err, doc) {
     if (err) return console.error(err);
     console.log("First object saved")
   });
 
   let instance2 = new dolphin(
-    { name: "Amazon River", age: '72', weight: 80 });
+    { name: "Amazon River", age: '46', weight: 120 });
   instance2.save(function (err, doc) {
     if (err) return console.error(err);
     console.log("Second object saved")
   });
 
   let instance3 = new dolphin(
-    { name: "Dolphin", age: '44', weight: 90 });
+    { name: "Ganges River", age: '65', weight: 140 });
   instance3.save(function (err, doc) {
     if (err) return console.error(err);
     console.log("Third object saved")
@@ -65,6 +89,14 @@ async function recreateDB() {
 }
 let reseed = true;
 if (reseed) { recreateDB(); }
+
+// passport config
+// Use the existing connection
+// The Account model
+var Account =require('./models/account');
+passport.use(new LocalStrategy(Account.authenticate()));
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -82,10 +114,4 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-//Get the default connection
-var db = mongoose.connection;
-//Bind connection to error event
-db.on('error', console.error.bind(console, 'MongoDB connectionerror:'));
-db.once("open", function(){
-console.log("Connection to DB succeeded")});
 module.exports = app;
