@@ -1,16 +1,15 @@
 var dolphin = require('../models/dolphin');
-
 // List of all dolphin
-exports.dolphin_list = async function (req, res) {
-    try {
-        thedolphin = await dolphin.find();
-        res.send(thedolphin);
+exports.dolphin_list = async function(req, res) {
+    try{
+    thedolphin = await dolphin.find();
+    res.send(thedolphin);
     }
-    catch (err) {
-        res.status(500);
-        res.send(`{"error": ${err}}`);
+    catch(err){
+    res.error(500,`{"error": ${err}}`);
+    res.status(500);
     }
-};
+    };
 // for a specific dolphin.
 exports.dolphin_detail = async function (req, res) {
     console.log("detail" + req.params.id)
@@ -22,23 +21,23 @@ exports.dolphin_detail = async function (req, res) {
         res.send(`{"error": document for id ${req.params.id} not found`);
     }
 };
-// Handle dolphin create on POST.
-exports.dolphin_create_post = async function (req, res) {
+// Handle Costume create on POST.
+exports.dolphin_create_post = async function(req, res) {
     console.log(req.body)
     let document = new dolphin();
     document.name = req.body.name;
     document.age = req.body.age;
     document.weight = req.body.weight;
-    try {
-        let result = await document.save();
-        res.send(result);
+    try{
+    let result = await document.save();
+    res.send(result);
     }
-    catch (err) {
-        res.status(500);
-        res.send(`{"error": ${err}}`);
-    }
+    catch(err){
+    res.status(500);
+    res.send(`{"error": ${err}}`);
+    } 
 };
-// Handle dolphin delete form on DELETE.
+// Handle Costume delete form on DELETE.
 exports.dolphin_delete = async function (req, res) {
     console.log("delete " + req.params.id)
     try {
@@ -50,8 +49,9 @@ exports.dolphin_delete = async function (req, res) {
         res.send(`{"error": Error deleting ${err}}`);
     }
 };
-// Handle dolphin update form on PUT.
+// Handle Costume update form on PUT.
 exports.dolphin_update_put = async function (req, res) {
+    //res.send('NOT IMPLEMENTED: dolphin update PUT' + req.params.id);
     console.log(`update on id ${req.params.id} with body
 ${JSON.stringify(req.body)}`)
     try {
@@ -59,7 +59,7 @@ ${JSON.stringify(req.body)}`)
         // Do updates of properties
         if (req.body.name)
             toUpdate.name = req.body.name;
-        if (req.body.age) toUpdate.cost = req.body.age;
+        if (req.body.age) toUpdate.age = req.body.age;
         if (req.body.weight) toUpdate.weight = req.body.weight;
         let result = await toUpdate.save();
         console.log("Sucess " + result)
@@ -70,21 +70,20 @@ ${JSON.stringify(req.body)}`)
 failed`);
     }
 };
-
 // VIEWS
 // Handle a show all view
-exports.dolphin_view_all_Page = async function (req, res) {
-    try {
-        thedolphin = await dolphin.find();
-        res.render('dolphin', { title: 'dolphin Search Results', results: thedolphin });
+exports.dolphin_view_all_Page = async function(req, res) {
+    try{
+    thedolphin = await dolphin.find();
+    res.render('dolphin', { title: 'dolphin Search Results', results: thedolphin });
     }
-    catch (err) {
-        res.status(500);
-        res.send(`{"error": ${err}}`);
+    catch(err){
+    res.status(500);
+    res.send(`{"error": ${err}}`);
     }
-};
+   };
 
-// Handle a show one view with id specified by query
+   // Handle a show one view with id specified by query
 exports.dolphin_view_one_Page = async function (req, res) {
     console.log("single view for id " + req.query.id)
     try {
@@ -98,16 +97,19 @@ exports.dolphin_view_one_Page = async function (req, res) {
     }
 };
 
-exports.dolphin_create_Page = function (req, res) {
+// Handle building the view for creating a dolphin.
+// No body, no in path parameter, no query.
+// Does not need to be async
+exports.dolphin_create_Page = function(req, res) {
     console.log("create view")
-    try {
-        res.render('dolphinCreate', { title: 'dolphin Create' });
+    try{
+    res.render('dolphincreate', { title: 'dolphin Create'});
     }
-    catch (err) {
-        res.status(500)
-        res.send(`{'error': '${err}'}`);
+    catch(err){
+    res.status(500)
+    res.send(`{'error': '${err}'}`);
     }
-};
+    };
 
 // Handle building the view for updating a dolphin.
 // query provides the id
