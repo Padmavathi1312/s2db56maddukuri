@@ -1,16 +1,26 @@
-extends layout
-
 block content
-
   h1= title
-  - let result = results
-  div(class= "container-fluid")
-    div(class = "col m-1")
-      each item,index in result
-        - let destination = `dispatch(\"/dolphin/update?id=${item._id}\")`
-        div(class="row-sm-2" class="m-1") Item #{item.name}(#{item.age}) is #{item.weight}
-        button.btn( class="btn-primary m-1", onclick= destination) Update
+
+  - let items = results; 
+
+  - let o;
   script.
-    function dispatch(path){
-      window.location.href=path
-    }
+    function buy(x){
+      alert('Purchased Item: ' + x)
+    } 
+  div(class="container-fluid") 
+    div(class="row m-1") 
+      each item in items  
+        - let destination = `dispatch(\"/dolphin/update?id=${item._id}\")` 
+        - let destination1 = `dispatch(\"/dolphin/create\")` 
+        - let destination2 = `dispatch(\"/dolphin/delete?id=${item._id}\")` 
+        - let destination3 = `dispatch(\"/dolphin/detail?id=${item._id}\")` 
+        div(class="row-sm-2" class="m-1") Item #{item.name}(#{item.age}) is #{item.weight} 
+          button.btn( class="btn-primary ml-1", onclick= destination) Update 
+          button.btn( class="btn-primary ml-1", onclick= destination1) create 
+          button.btn( class="btn-primary ml-1", onclick= destination2) delete 
+          button.btn( class="btn-primary ml-1", onclick= destination3) detail 
+script. 
+  function dispatch(path){ 
+    window.location.href=path 
+  }

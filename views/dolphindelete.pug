@@ -2,9 +2,6 @@ extends layout
 block content
     h1= title
 
-    if (toShow == null)
-        h2 No instance to delete
-    else
         - let dolphin_id = toShow._id
         - let name = toShow.name
         - let age = toShow.age

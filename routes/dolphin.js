@@ -13,19 +13,19 @@ req.session.returnTo = req.originalUrl;
 res.redirect("/login");
 }
 
-/* GET home page. */
+/* GET costumes for all instances view*/
 router.get('/', dolphin_controllers.dolphin_view_all_Page);
 
-/* GET detail dolphin page */
+/* GET costumes for one instance view*/
 router.get('/detail', dolphin_controllers.dolphin_view_one_Page);
 
 /* GET create dolphin page */
-router.get('/create', dolphin_controllers.dolphin_create_Page);
+router.get('/create', secured, dolphin_controllers.dolphin_create_Page);
 
-/* GET create update page */
-router.get('/update', secured, dolphin_controllers.dolphin_update_Page);
+/* GET update dolphin page */
+router.get('/update',secured, dolphin_controllers.dolphin_update_Page);
 
 /* GET delete delete page */
-router.get('/delete', dolphin_controllers.dolphin_delete_Page);
+router.get('/delete',secured, dolphin_controllers.dolphin_delete_Page);
 
 module.exports = router;

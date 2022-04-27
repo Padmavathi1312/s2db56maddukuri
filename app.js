@@ -6,18 +6,19 @@ var logger = require('morgan');
 
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-passport.use(new LocalStrategy(function (username, password, done) {
+passport.use(new LocalStrategy(
+  function(username, password, done) {
   Account.findOne({ username: username }, function (err, user) {
-    if (err) { return done(err); }
-    if (!user) {
-      return done(null, false, { message: 'Incorrect username.' });
-    }
-    if (!user.validPassword(password)) {
-      return done(null, false, { message: 'Incorrect password.' });
-    }
-    return done(null, user);
+  if (err) { return done(err); }
+  if (!user) {
+  return done(null, false, { message: 'Incorrect username.' });
+  }
+  if (!user.validPassword(password)) {
+  return done(null, false, { message: 'Incorrect password.' });
+  }
+  return done(null, user);
   });
-}))
+  }))
 
 mongoose = require('mongoose');
 var dolphin = require('./models/dolphin');
@@ -31,7 +32,7 @@ var selectorRouter = require('./routes/selector');
 var resourceRouter = require('./routes/resource');
 
 
-mongoose.connect(connectionString, {
+mongoose.connect('mongodb+srv://Chooseyourconnection:padma@cluster0.2h8dj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -50,9 +51,9 @@ app.use(require('express-session')({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: false
-}));
-app.use(passport.initialize());
-app.use(passport.session());
+  }));
+  app.use(passport.initialize());
+  app.use(passport.session());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -63,34 +64,6 @@ app.use('/addmods', addmodsRouter);
 app.use('/selector', selectorRouter);
 app.use('/resource', resourceRouter);
 
-// We can seed the collection if needed on server start
-async function recreateDB() {
-  // Delete everything
-  await dolphin.deleteMany();
-  let instance1 = new dolphin(
-    { name: "Bottle Nose", age: '45', weight: 100 });
-  instance1.save(function (err, doc) {
-    if (err) return console.error(err);
-    console.log("First object saved")
-  });
-
-  let instance2 = new dolphin(
-    { name: "Amazon River", age: '46', weight: 120 });
-  instance2.save(function (err, doc) {
-    if (err) return console.error(err);
-    console.log("Second object saved")
-  });
-
-  let instance3 = new dolphin(
-    { name: "Ganges River", age: '65', weight: 140 });
-  instance3.save(function (err, doc) {
-    if (err) return console.error(err);
-    console.log("Third object saved")
-  });
-}
-let reseed = true;
-if (reseed) { recreateDB(); }
-
 // passport config
 // Use the existing connection
 // The Account model
@@ -98,6 +71,34 @@ var Account =require('./models/account');
 passport.use(new LocalStrategy(Account.authenticate()));
 passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
+
+// We can seed the collection if needed on server start
+async function recreateDB() {
+  // Delete everything
+  await dolphin.deleteMany();
+  let instance1 = new dolphin(
+    { name: "Bottle nose", age: '45', weight: 60 });
+  instance1.save(function (err, doc) {
+    if (err) return console.error(err);
+    console.log("First object saved")
+  });
+
+  let instance2 = new dolphin(
+    { name: "Amazon River", age: '71', weight: 80 });
+  instance2.save(function (err, doc) {
+    if (err) return console.error(err);
+    console.log("Second object saved")
+  });
+
+  let instance3 = new dolphin(
+    { name: "Ganges River", age: '64', weight: 40 });
+  instance3.save(function (err, doc) {
+    if (err) return console.error(err);
+    console.log("Third object saved")
+  });
+}
+let reseed = true;
+if (reseed) { recreateDB(); }
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -115,4 +116,10 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
+//Get the default connection
+var db = mongoose.connection;
+//Bind connection to error event
+db.on('error', console.error.bind(console, 'MongoDB connectionerror:'));
+db.once("open", function(){
+console.log("Connection to DB succeeded")});
 module.exports = app;
